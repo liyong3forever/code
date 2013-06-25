@@ -1,0 +1,45 @@
+class Solution {
+public:
+    ListNode *reverseKGroup(ListNode *head, int k) {
+  	if( head== NULL || head->next == NULL || k== 1 ) return head;
+		// to get the list length
+		int listLen = 1;
+		for ( ListNode *ptr = head; ptr->next != NULL; ptr = ptr->next )
+		{
+			listLen +=1;
+		}
+		// to calculate the number of groups to be inverted
+		int factor = listLen / k;
+		// the pointer of the start subgroup being dealt is linked to the next group
+		ListNode * startPtr= head; 
+		// the pointer of the start subgroup dealt before is to link to group being dealt  
+		ListNode * startPtrBef = head; 
+		ListNode * temPtr = head;
+		ListNode * temPtrNext = temPtr->next;
+		for ( int m=0; m!= factor; m++ )
+		{
+			//inverse the subgroup
+			for ( int i=0; i!= k-1; i++ )
+			{
+				ListNode * ptr = temPtr;
+				temPtr = temPtrNext;
+				temPtrNext = temPtrNext->next;
+				temPtr->next = ptr;
+				
+			}
+			if ( m==0 ) head = temPtr;
+			// linked to the next group
+			startPtr->next = temPtrNext;
+			// the subgroup dealt before is linked to this subgroup
+			if( m>0 ) startPtrBef->next = temPtr;
+			// initialization for the next loop
+			startPtrBef = startPtr;
+			startPtr = temPtrNext;
+			temPtr = startPtr;
+			if( temPtr!= NULL )	temPtrNext = temPtr->next;
+			else temPtrNext =NULL;
+		}
+		return head;
+        
+    }
+};
